@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class Camira : MonoBehaviour
 {
-    private float rotaX;
-    public Transform selfspin;
-    public float rotation;
+    float rotaX;
+    float rotaY;
+    public Transform orientacao;
+    public float senY;
+    public float senX;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -20,11 +23,16 @@ public class Camira : MonoBehaviour
 
     private void Camera()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * rotation * Time.deltaTime;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * rotation * Time.deltaTime;
+        //pegar o input
+        float mouseX = Input.GetAxisRaw("Mouse X") * senX * Time.deltaTime;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * senY * Time.deltaTime;
 
         rotaX -= mouseY;
-        transform.localRotation = Quaternion.Euler(rotaX, 0f, 0f);
-        selfspin.Rotate(Vector3.up * mouseX);
+        rotaX = Mathf.Clamp(rotaX, -90f, 90f);
+        rotaY += mouseX;
+
+        //rotacionar camera e orientacao
+        transform.rotation = Quaternion.Euler(rotaX, rotaY, 0);
+        orientacao.rotation = Quaternion.Euler(0, rotaY, 0);
     }
 }
